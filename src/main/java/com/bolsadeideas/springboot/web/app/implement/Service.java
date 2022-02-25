@@ -292,6 +292,7 @@ public class Service {
 			servicio.seleccionClase(opcionClase, opcionmetodo);
 			System.out.println("Si desea terminar ingrese 0 y si desea continuar cualquier numero distinto de 0");
 			bucle = lectura.nextInt();
+			
 		}
 
 	}
