@@ -20,7 +20,7 @@ public class EjemploParamsController {
 	@GetMapping("/string")
 	public String param(@RequestParam(name = "texto", required = false, defaultValue = "sin dato....") String texto,
 			Model model) {
-		model.addAttribute("resultado", "El texto enviado es : " + texto);
+		model.addAttribute("resultado", "El texto enviado es: " + texto);
 		return "params/ver";
 	}
 
@@ -33,7 +33,8 @@ public class EjemploParamsController {
 	@GetMapping("/mix-params-request")
 	public String param(HttpServletRequest request, Model model) {
 		String saludo = request.getParameter("saludo");
-		Integer numero = null;
+		Integer numero = 0;
+                
 		try {
 			numero = Integer.parseInt(request.getParameter("numero"));
 		} catch (NumberFormatException e) {
