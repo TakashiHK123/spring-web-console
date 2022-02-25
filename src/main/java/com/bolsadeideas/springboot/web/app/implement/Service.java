@@ -1,5 +1,6 @@
 package com.bolsadeideas.springboot.web.app.implement;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -280,6 +281,12 @@ public class Service {
 
 	public static void main(String[] args) {
 		Scanner lectura = new Scanner(System.in);
+		
+		Date date = new Date();
+        long timeInMilliSeconds = date.getTime();
+        java.sql.Date date1 = new java.sql.Date(timeInMilliSeconds);
+        System.out.println("SQL Date: " + date1);
+        
 		int bucle = 1;
 		while (0 != bucle) {
 			System.out.println(
@@ -294,7 +301,7 @@ public class Service {
 			bucle = lectura.nextInt();
 			
 		}
-
+		
 	}
 
 }
