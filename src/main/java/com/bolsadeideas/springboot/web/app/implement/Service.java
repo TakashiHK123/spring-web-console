@@ -1,16 +1,19 @@
 package com.bolsadeideas.springboot.web.app.implement;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
 import com.bolsadeideas.springboot.web.app.entities.Alumno;
+import com.bolsadeideas.springboot.web.app.entities.Cuenta;
 import com.bolsadeideas.springboot.web.app.entities.Curso;
 import com.bolsadeideas.springboot.web.app.entities.CursoHabilitados;
 import com.bolsadeideas.springboot.web.app.entities.Inscripciones;
 import com.bolsadeideas.springboot.web.app.entities.Materia;
 import com.bolsadeideas.springboot.web.app.entities.Profesor;
 import com.bolsadeideas.springboot.web.app.repository.CourseManager;
+import com.bolsadeideas.springboot.web.app.repository.CuentaManager;
 import com.bolsadeideas.springboot.web.app.repository.CursoHabilitadosManager;
 import com.bolsadeideas.springboot.web.app.repository.InscripcionesManager;
 import com.bolsadeideas.springboot.web.app.repository.MateriaManager;
@@ -278,25 +281,62 @@ public class Service {
 			break;
 		}
 	}
+	
+	//Implementacion de los Metodos De la Cuenta
+	public void seleccionMetodoCuenta(String OpcionMetodo) {
+		CuentaManager obj = new CuentaManager();
+		Scanner lectura2 = new Scanner(System.in);
+		switch (OpcionMetodo) {
+		case "1": // all lista Cuenta
+			List<Cuenta> allcuenta = obj.getAllCuenta();
+			System.out.println(allcuenta.toString());
+			break;
+		case "2": // Eliminar Cuenta
+			System.out.println("Ingrese el ID a eliminar: \n");
+			int idEliminar = lectura2.nextInt();
+			obj.delete(idEliminar);
+			break;
+			
+		case "3": // Modificar Cuenta
+			System.out.println("Ingrese el ID a modificar: \n");
+			int idModify = lectura2.nextInt();
+			System.out.println("Saldo: \n");
+			int saldo = lectura2.nextInt();
+			obj.modify(idModify, saldo);
+			break;
+			
+		case "4": // Buscar Cuenta
+			System.out.println("Ingrese el ID a buscar de la cuenta: \n");
+			int idbuscar = lectura2.nextInt();
+			Cuenta cuenta = new Cuenta();
+			cuenta = obj.getByid(idbuscar);
+			System.out.println(cuenta.toString());
+			break;
+		}
+	}
 
 	public static void main(String[] args) {
 		Scanner lectura = new Scanner(System.in);
-		
-		Date date = new Date();
-        long timeInMilliSeconds = date.getTime();
-        java.sql.Date date1 = new java.sql.Date(timeInMilliSeconds);
-        System.out.println("SQL Date: " + date1);
-        
 		int bucle = 1;
 		while (0 != bucle) {
 			System.out.println(
-					"Ingrese la clase por teclado el numero correspondiente: \n1. Alumno\n2. Curso\n3. Materia\n4. Profesor\n5. Inscripcion\n6. CursosHabilitados");
+					"Ingrese la clase por teclado el numero correspondiente: \n1. Alumno\n2. Curso\n3. Materia\n4. Profesor\n5. Inscripcion\n6. CursosHabilitados\n7. Cuenta");
 			String opcionClase = lectura.next();
-			System.out.println("A elegido la opcion: " + opcionClase
-					+ "\nIngrese el metodo a utilizar: \n1. Ver lista\n2. Agregar\n3. Eliminar\n4. Modificar\n5. Buscar por id");
-			String opcionmetodo = lectura.next();
-			Service servicio = new Service();
-			servicio.seleccionClase(opcionClase, opcionmetodo);
+			if (opcionClase=="7") {
+				System.out.println("A elegido la opcion: " + opcionClase
+						+ "\nIngrese el metodo a utilizar: \n1. Ver lista\n2. Eliminar\n3. Modificar\n4. Buscar por id");
+				String opcionmetodo = lectura.next();
+				Service servicio = new Service();
+				servicio.seleccionClase(opcionClase, opcionmetodo);
+			}
+			else {
+				System.out.println("A elegido la opcion: " + opcionClase
+						+ "\nIngrese el metodo a utilizar: \n1. Ver lista\n2. Agregar\n3. Eliminar\n4. Modificar\n5. Buscar por id");
+				String opcionmetodo = lectura.next();
+				Service servicio = new Service();
+				servicio.seleccionClase(opcionClase, opcionmetodo);
+			}
+			
 			System.out.println("Si desea terminar ingrese 0 y si desea continuar cualquier numero distinto de 0");
 			bucle = lectura.nextInt();
 			

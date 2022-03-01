@@ -22,11 +22,12 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 public class CuentaManager {
 	
-	private static final String SQL_INSERT = "INSERT INTO cuenta (idcuenta, saldo, fecha, hora, id_inscripcion) VALUES (?, ?, ?, ?, ?)";
+	private static final String SQL_INSERT = "INSERT INTO cuenta (idcuenta, saldo, fecha, id_inscripcion) VALUES (?, ?, ?, ?)";
     private static final String SQL = "SELECT * FROM cuenta";
     private static final String SQL_DELETE = "DELETE FROM cuenta WHERE idcuenta=?";
-    private static final String SQL_MODIFY = "UPDATE cuenta SET saldo=?, fecha=?, hora=? WHERE idcuenta=?";
+    private static final String SQL_MODIFY = "UPDATE cuenta SET saldo=? WHERE idcuenta=?";
     private static final int saldoC=120000; 
+    
     public List<Cuenta> getAllCuenta() {
 
         try (Connection conn = ConnectionManager.getConnection();
@@ -40,7 +41,6 @@ public class CuentaManager {
                 cuenta.setId_Cuenta(resultSet.getInt("idcuenta"));
                 cuenta.setSaldo(resultSet.getInt("saldo"));
                 cuenta.setFecha(resultSet.getDate("fecha"));
-                cuenta.setHora(resultSet.getTime("hora"));
                 cuenta.setId_Inscripcion(resultSet.getInt("id_inscripcion"));
                 
                 listaCuenta.add(cuenta);
@@ -54,7 +54,7 @@ public class CuentaManager {
         return Collections.EMPTY_LIST; 
     }
 
-    public void generarCuenta() {
+    public void generarCuenta(int id_inscripcion) {
 
         try (Connection conn = ConnectionManager.getConnection();
                 PreparedStatement preparestatement = conn.prepareStatement(SQL_INSERT)) {
@@ -62,15 +62,29 @@ public class CuentaManager {
         	CuentaManager cuentaManager = new CuentaManager(); 
             preparestatement.setInt(1, cuentaManager.generarCodigo());
             preparestatement.setInt(2, saldoC);            
-            preparestatement.setDate(3, cuentaManager.sacarFecha());
-            preparestatement.setTime(4, hora);
-
+            preparestatement.setDate(3, (java.sql.Date) cuentaManager.sacarFecha());
+            preparestatement.setInt(4, id_inscripcion);
             preparestatement.executeUpdate();
 
         } catch (SQLException e) {
             System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
         }
 
+    }
+    
+    public void modify(int idCuenta, int saldo){
+        try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement preparestatement = conn.prepareStatement(SQL_MODIFY)){
+            
+            preparestatement.setInt(1, saldo);
+            preparestatement.setInt(2, idCuenta); 
+            
+            preparestatement.executeUpdate(); 
+            
+            
+        }catch (SQLException e) {
+            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+        }
     }
 
     public void delete(int idcuenta) {
@@ -88,24 +102,9 @@ public class CuentaManager {
 
     }
     
-    public void modify(int idCuenta, int saldo, Date fecha, Time hora){
-        try(Connection conn = ConnectionManager.getConnection();
-                PreparedStatement preparestatement = conn.prepareStatement(SQL_MODIFY)){
-            
-            preparestatement.setInt(1, saldo);
-            preparestatement.setDate(2, fecha);
-            preparestatement.setTime(3, hora);
-            preparestatement.setInt(4, idCuenta); 
-            
-            preparestatement.executeUpdate(); 
-            
-            
-        }catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-        }
-    }
+    
 
-    public Alumno getByid(int idAlumno) {
+    public Cuenta getByid(int idCuenta) {
 
         try (Connection conn = ConnectionManager.getConnection();
                 Statement statement = conn.createStatement()) {
@@ -114,13 +113,14 @@ public class CuentaManager {
             
             while (resultSet.next()) {
                               
-                if (resultSet.getInt("idalumno")==idAlumno){
-                    Alumno student = new Alumno();
-                    student.setIdAlumno(resultSet.getInt("idalumno"));
-                    student.setNombre(resultSet.getString("nombre"));
-                    student.setApellido(resultSet.getString("apellido"));
+                if (resultSet.getInt("idalumno")==idCuenta){
+                    Cuenta cuenta = new Cuenta();
+                    cuenta.setId_Cuenta(resultSet.getInt("idcuenta"));;
+                    cuenta.setId_Inscripcion(resultSet.getInt("id_inscripcion"));
+                    cuenta.setSaldo(resultSet.getInt("saldo"));
+                    cuenta.setFecha(resultSet.getDate("fecha"));
                     resultSet.close();
-                    return student; 
+                    return cuenta; 
                 }
            
             }
@@ -141,7 +141,7 @@ public class CuentaManager {
     public Date sacarFecha() {
 		Date date = new Date();
         long timeInMilliSeconds = date.getTime();
-        java.sql.Date date1 = new java.sql.Date(timeInMilliSeconds);
+        java.sql.Timestamp date1 = new java.sql.Timestamp(timeInMilliSeconds);
     	return date1;  
     }
 

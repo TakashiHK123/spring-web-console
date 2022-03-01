@@ -11,19 +11,17 @@ public class Cuenta implements Serializable {
 	private int id_Inscripcion;
 	private int saldo;
 	private Date fecha;
-	private Time hora;
 
 	public Cuenta() {
 
 	}
 
-	public Cuenta(int id_Cuenta, int id_Inscripcion, int saldo, Date fecha, Time hora) {
+	public Cuenta(int id_Cuenta, int id_Inscripcion, int saldo, Date fecha) {
 		super();
 		this.id_Cuenta = id_Cuenta;
 		this.id_Inscripcion = id_Inscripcion;
 		this.saldo = saldo;
 		this.fecha = fecha;
-		this.hora = hora;
 	}
 
 	public int getId_Cuenta() {
@@ -58,13 +56,6 @@ public class Cuenta implements Serializable {
 		this.fecha = fecha;
 	}
 
-	public Time getHora() {
-		return hora;
-	}
-
-	public void setHora(Time hora) {
-		this.hora = hora;
-	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
@@ -73,7 +64,7 @@ public class Cuenta implements Serializable {
 	@Override
 	public String toString() {
 		return "Cuenta [id_Cuenta=" + id_Cuenta + ", id_Inscripcion=" + id_Inscripcion + ", saldo=" + saldo + ", fecha="
-				+ fecha + ", hora=" + hora + "]\n";
+				+ fecha  + "]\n";
 	}
 
 
