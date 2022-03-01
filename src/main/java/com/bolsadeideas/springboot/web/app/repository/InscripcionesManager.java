@@ -49,12 +49,16 @@ public class InscripcionesManager {
 
         try (Connection conn = ConnectionManager.getConnection();
                 PreparedStatement preparestatement = conn.prepareStatement(SQL_INSERT)) {
-        	InscripcionesManager inscripciones = new InscripcionesManager(); 
-        	preparestatement.setInt(1, inscripciones.generarCodigo());
+        	int codig; 
+        	InscripcionesManager inscripciones = new InscripcionesManager();
+        	CuentaManager cuentaManager = new CuentaManager();
+        	codig = inscripciones.generarCodigo(); 
+        	preparestatement.setInt(1, codig);
             preparestatement.setInt(2, idcursohabilitado);
             preparestatement.setInt(3, idalumno);
-           
             preparestatement.executeUpdate();
+            cuentaManager.generarCuenta(codig); 
+            codig=0; 
 
         } catch (SQLException e) {
             System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());

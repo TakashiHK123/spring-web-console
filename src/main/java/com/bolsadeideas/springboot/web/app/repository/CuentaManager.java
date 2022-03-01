@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,8 +41,8 @@ public class CuentaManager {
                 Cuenta cuenta = new Cuenta();
                 cuenta.setId_Cuenta(resultSet.getInt("idcuenta"));
                 cuenta.setSaldo(resultSet.getInt("saldo"));
-                cuenta.setFecha(resultSet.getDate("fecha"));
-                cuenta.setId_Inscripcion(resultSet.getInt("id_inscripcion"));
+                cuenta.setFecha(resultSet.getTimestamp("fecha"));  
+                cuenta.setId_Inscripcion(resultSet.getInt("id_inscripcion")); 
                 
                 listaCuenta.add(cuenta);
             }
@@ -62,7 +63,7 @@ public class CuentaManager {
         	CuentaManager cuentaManager = new CuentaManager(); 
             preparestatement.setInt(1, cuentaManager.generarCodigo());
             preparestatement.setInt(2, saldoC);            
-            preparestatement.setDate(3, (java.sql.Date) cuentaManager.sacarFecha());
+            preparestatement.setTimestamp(3, (Timestamp) cuentaManager.sacarFecha());
             preparestatement.setInt(4, id_inscripcion);
             preparestatement.executeUpdate();
 
@@ -118,7 +119,7 @@ public class CuentaManager {
                     cuenta.setId_Cuenta(resultSet.getInt("idcuenta"));;
                     cuenta.setId_Inscripcion(resultSet.getInt("id_inscripcion"));
                     cuenta.setSaldo(resultSet.getInt("saldo"));
-                    cuenta.setFecha(resultSet.getDate("fecha"));
+                    cuenta.setFecha(resultSet.getTimestamp("fecha")); 
                     resultSet.close();
                     return cuenta; 
                 }

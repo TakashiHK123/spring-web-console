@@ -1,8 +1,8 @@
 package com.bolsadeideas.springboot.web.app.entities;
 
 import java.io.Serializable;
-import java.sql.Date;
-import java.sql.Time;
+
+import java.sql.Timestamp;
 
 public class Cuenta implements Serializable {
 
@@ -10,13 +10,13 @@ public class Cuenta implements Serializable {
 	private int id_Cuenta;
 	private int id_Inscripcion;
 	private int saldo;
-	private Date fecha;
+	private Timestamp fecha;
 
 	public Cuenta() {
 
 	}
 
-	public Cuenta(int id_Cuenta, int id_Inscripcion, int saldo, Date fecha) {
+	public Cuenta(int id_Cuenta, int id_Inscripcion, int saldo, Timestamp fecha) {
 		super();
 		this.id_Cuenta = id_Cuenta;
 		this.id_Inscripcion = id_Inscripcion;
@@ -48,11 +48,11 @@ public class Cuenta implements Serializable {
 		this.saldo = saldo;
 	}
 
-	public Date getFecha() {
+	public Timestamp getFecha() {
 		return fecha;
 	}
 
-	public void setFecha(Date fecha) {
+	public void setFecha(Timestamp fecha) {
 		this.fecha = fecha;
 	}
 

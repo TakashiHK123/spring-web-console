@@ -43,6 +43,9 @@ public class Service {
 		case "6":
 			service.seleccionMetodoCursoHabilitado(OpcionMetodo);
 			break;
+		case "7":
+			service.seleccionMetodoCuenta(OpcionMetodo);
+			break; 
 		}
 	}
 
