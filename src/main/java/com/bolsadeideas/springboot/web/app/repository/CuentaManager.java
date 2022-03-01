@@ -2,24 +2,18 @@ package com.bolsadeideas.springboot.web.app.repository;
 
 import java.sql.Connection;
 import java.util.Date;
-import java.text.DateFormat;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import javax.print.attribute.standard.DateTimeAtCompleted;
-
 import com.bolsadeideas.springboot.web.app.entities.Cuenta;
 import com.bolsadeideas.springboot.web.utils.ConnectionManager;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 
 public class CuentaManager {
 	
@@ -140,7 +134,7 @@ public class CuentaManager {
     }
     
     public Date sacarFecha() {
-		Date date = new Date();
+		Date date = new Date(); 
         long timeInMilliSeconds = date.getTime();
         java.sql.Timestamp date1 = new java.sql.Timestamp(timeInMilliSeconds);
     	return date1;  
