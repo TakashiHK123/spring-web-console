@@ -45,8 +45,11 @@ public class Service {
 			break;
 		case "7":
 			service.seleccionMetodoCuenta(OpcionMetodo);
-			break; 
+			break;
+		case "8":
+			break;
 		}
+		
 	}
 
 	public void seleccionMetodoAlumno(String OpcionMetodo) {
@@ -85,6 +88,8 @@ public class Service {
 			Alumno alu = new Alumno();
 			alu = studentManager.getByid(idbuscar);
 			System.out.println(alu.toString());
+			break;
+		case "6":
 			break;
 		}
 	}
@@ -126,6 +131,8 @@ public class Service {
 			profe = professorManager.getByid(idbuscar);
 			System.out.println(profe.toString());
 			break;
+		case "6":
+			break;
 		}
 	}
 
@@ -162,6 +169,8 @@ public class Service {
 			materia = materiaManager.getByid(idbuscar);
 			System.out.println(materia.toString());
 			break;
+		case "6":
+			break;
 		}
 	}
 
@@ -197,6 +206,8 @@ public class Service {
 			Curso curso = new Curso();
 			curso = courseManager.getByid(idbuscar);
 			System.out.println(curso.toString());
+			break;
+		case "6":
 			break;
 		}
 	}
@@ -242,6 +253,8 @@ public class Service {
 			cursohabilitado = obj.getByid(idbuscar);
 			System.out.println(cursohabilitado.toString());
 			break;
+		case "6":
+			break;
 		}
 	}
 
@@ -282,6 +295,8 @@ public class Service {
 			inscripcion = obj.getByid(idbuscar);
 			System.out.println(inscripcion.toString());
 			break;
+		case "6":
+			break;
 		}
 	}
 	
@@ -305,7 +320,9 @@ public class Service {
 			int idModify = lectura2.nextInt();
 			System.out.println("Saldo: \n");
 			int saldo = lectura2.nextInt();
-			obj.modify(idModify, saldo);
+			System.out.println("Pagos: \n");
+			byte pagos= lectura2.nextByte();
+			obj.modify(idModify, saldo, pagos);
 			break;
 			
 		case "4": // Buscar Cuenta
@@ -314,7 +331,27 @@ public class Service {
 			Cuenta cuenta = new Cuenta();
 			cuenta = obj.getByid(idbuscar);
 			System.out.println(cuenta.toString());
+			byte pagosJ = cuenta.getPagos();
+			if(pagosJ==4) {
+				System.out.println("Cuenta PAGADA" );
+				break;
+			}
+			System.out.println("Pagos pendientes: \n1. Pagar la cuota\n2. Salir");
+			String OpPago = lectura2.next();
+			switch (OpPago) {
+			case "1":
+				pagosJ++;
+				System.out.println("Pagar la cuenta " + pagosJ + "/4\n" );
+				System.out.println("Ingresar el numero de cuotas a pagar sobre /4: " );
+				byte Opagos = lectura2.nextByte();
+				obj.pagarCuenta(idbuscar, Opagos);
+				break;
+			case "2":
+				break;
+			}
 			break;
+		case "5":
+			break; 
 		}
 	}
 
@@ -323,23 +360,25 @@ public class Service {
 		int bucle = 1;
 		while (0 != bucle) {
 			System.out.println(
-					"Ingrese la clase por teclado el numero correspondiente: \n1. Alumno\n2. Curso\n3. Materia\n4. Profesor\n5. Inscripcion\n6. CursosHabilitados\n7. Cuenta");
+					"Ingrese la clase por teclado el numero correspondiente: \n1. Alumno\n2. Curso\n3. Materia\n4. Profesor\n5. Inscripcion\n6. CursosHabilitados\n7. Cuenta\n8. Salir");
 			String opcionClase = lectura.next();
-			if (opcionClase=="7") {
+			if ("8".equals(opcionClase)) {
+				break; 
+			}
+			else if ("7".equals(opcionClase)) {
 				System.out.println("A elegido la opcion: " + opcionClase
-						+ "\nIngrese el metodo a utilizar: \n1. Ver lista\n2. Eliminar\n3. Modificar\n4. Buscar por id");
+						+ "\nIngrese el metodo a utilizar: \n1. Ver lista\n2. Eliminar\n3. Modificar\n4. Buscar por id\n5. Salir");
 				String opcionmetodo = lectura.next();
 				Service servicio = new Service();
 				servicio.seleccionClase(opcionClase, opcionmetodo);
 			}
 			else {
 				System.out.println("A elegido la opcion: " + opcionClase
-						+ "\nIngrese el metodo a utilizar: \n1. Ver lista\n2. Agregar\n3. Eliminar\n4. Modificar\n5. Buscar por id");
+						+ "\nIngrese el metodo a utilizar: \n1. Ver lista\n2. Agregar\n3. Eliminar\n4. Modificar\n5. Buscar por id\n6. Salir");
 				String opcionmetodo = lectura.next();
 				Service servicio = new Service();
 				servicio.seleccionClase(opcionClase, opcionmetodo);
 			}
-			
 			System.out.println("Si desea terminar ingrese 0 y si desea continuar cualquier numero distinto de 0");
 			bucle = lectura.nextInt();
 			

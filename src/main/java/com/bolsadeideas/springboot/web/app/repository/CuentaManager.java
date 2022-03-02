@@ -17,11 +17,13 @@ import com.bolsadeideas.springboot.web.utils.ConnectionManager;
 
 public class CuentaManager {
 	
-	private static final String SQL_INSERT = "INSERT INTO cuenta (idcuenta, saldo, fecha, id_inscripcion) VALUES (?, ?, ?, ?)";
+	private static final String SQL_INSERT = "INSERT INTO cuenta (idcuenta, saldo, fecha, id_inscripcion, pagos) VALUES (?, ?, ?, ?, ?)";
     private static final String SQL = "SELECT * FROM cuenta";
     private static final String SQL_DELETE = "DELETE FROM cuenta WHERE idcuenta=?";
     private static final String SQL_MODIFY = "UPDATE cuenta SET saldo=? WHERE idcuenta=?";
+    private static final String SQL_PAGO = "UPDATE cuenta SET pagos=? WHERE idcuenta=?";
     private static final int saldoC=120000; 
+    private static final byte Pagos=0; 
     
     public List<Cuenta> getAllCuenta() {
 
@@ -37,7 +39,7 @@ public class CuentaManager {
                 cuenta.setSaldo(resultSet.getInt("saldo"));
                 cuenta.setFecha(resultSet.getTimestamp("fecha"));  
                 cuenta.setId_Inscripcion(resultSet.getInt("id_inscripcion")); 
-                
+                cuenta.setPagos(resultSet.getByte("pagos"));
                 listaCuenta.add(cuenta);
             }
             resultSet.close();
@@ -59,6 +61,7 @@ public class CuentaManager {
             preparestatement.setInt(2, saldoC);            
             preparestatement.setTimestamp(3, (Timestamp) cuentaManager.sacarFecha());
             preparestatement.setInt(4, id_inscripcion);
+            preparestatement.setByte(5, Pagos);
             preparestatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -67,12 +70,12 @@ public class CuentaManager {
 
     }
     
-    public void modify(int idCuenta, int saldo){
+    public void modify(int idCuenta, int saldo, byte pago){
         try(Connection conn = ConnectionManager.getConnection();
                 PreparedStatement preparestatement = conn.prepareStatement(SQL_MODIFY)){
             
             preparestatement.setInt(1, saldo);
-            preparestatement.setInt(2, idCuenta); 
+            preparestatement.setInt(3, idCuenta); 
             
             preparestatement.executeUpdate(); 
             
@@ -108,12 +111,13 @@ public class CuentaManager {
             
             while (resultSet.next()) {
                               
-                if (resultSet.getInt("idalumno")==idCuenta){
+                if (resultSet.getInt("idcuenta")==idCuenta){
                     Cuenta cuenta = new Cuenta();
                     cuenta.setId_Cuenta(resultSet.getInt("idcuenta"));;
                     cuenta.setId_Inscripcion(resultSet.getInt("id_inscripcion"));
                     cuenta.setSaldo(resultSet.getInt("saldo"));
                     cuenta.setFecha(resultSet.getTimestamp("fecha")); 
+                    cuenta.setPagos(resultSet.getByte("pagos"));
                     resultSet.close();
                     return cuenta; 
                 }
@@ -126,6 +130,22 @@ public class CuentaManager {
         }
         return null; 
     }
+    
+    public void pagarCuenta(int idCuenta, byte pago) {
+    	
+    	try(Connection conn = ConnectionManager.getConnection();
+                PreparedStatement preparestatement = conn.prepareStatement(SQL_PAGO)){
+            
+            preparestatement.setByte(1, pago); 
+            preparestatement.setInt(2, idCuenta);
+            preparestatement.executeUpdate(); 
+            
+            
+        }catch (SQLException e) {
+            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
+        }
+    }
+    
     
     public int generarCodigo(){
         UUID uuid = UUID.randomUUID();
